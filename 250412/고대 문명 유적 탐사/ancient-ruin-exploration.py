@@ -6,10 +6,11 @@ board = [list(map(int, input().rstrip().split())) for _ in range(5)]
 M = list(map(int, input().rstrip().split()))
 
 # ✅ BFS: 유물 탐색
+# 중복 제거 버전
 def bfs(board):
     visited = [[False]*5 for _ in range(5)]
     score = 0
-    all_coords = []
+    all_coords = set()
 
     for i in range(5):
         for j in range(5):
@@ -28,8 +29,9 @@ def bfs(board):
                         group.append((nx, ny))
             if len(group) >= 3:
                 score += len(group)
-                all_coords.extend(group)
-    return score, all_coords
+                all_coords.update(group)  # set에 넣기
+
+    return score, list(all_coords)
 
 # ✅ exploration: 최대 점수 회전 탐색
 def exploration(board):
@@ -58,12 +60,14 @@ def exploration(board):
 
 # ✅ 유물 채움
 def fill_new_artifacts(board, coords):
-    coords.sort(key=lambda x: (x[1], -x[0]))  # 열 오름, 행 내림
+    # ✅ 중복 제거 + 우선순위 정렬
+    coords = list(set(coords))
+    coords.sort(key=lambda x: (x[1], -x[0]))
     for x, y in coords:
         if M:
             board[x][y] = M.pop(0)
         else:
-            board[x][y] = 0  # 유물 부족 시 0
+            board[x][y] = 0
 
 # ✅ 회전 + 유물 연쇄 처리
 def picknfill(board, explore_detail):
@@ -75,14 +79,14 @@ def picknfill(board, explore_detail):
         for j in range(3):
             board[r+i][c+j] = sub[i][j]
 
-    chain_score = 0
+    score = 0
     while True:
         s, group = bfs(board)
         if s == 0:
             break
-        chain_score += s
+        score += s
         fill_new_artifacts(board, group)
-    return chain_score
+    return score
 
 # ✅ 메인 실행
 for turn in range(K):
