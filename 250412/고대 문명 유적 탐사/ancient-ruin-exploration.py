@@ -67,7 +67,7 @@ def fill_new_artifacts(board, coords):
         if M:
             board[x][y] = M.pop(0)
         else:
-            board[x][y] = 0
+            board[x][y] = -1
 
 # ✅ 회전 + 유물 연쇄 처리
 def picknfill(board, explore_detail):
