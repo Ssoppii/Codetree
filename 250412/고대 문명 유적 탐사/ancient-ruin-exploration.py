@@ -51,7 +51,7 @@ def exploration(board):
                     for j in range(3):
                         board[r+i][c+j] = rotated[i][j]
                 score, _ = bfs(board)
-                if score > best_score or (score == best_score and k+1 < best_d):
+                if score > best_score or (score == best_score and k+1 < best_d) or (score == best_score and k+1 == best_d and c < best_c) or (score == best_score and k+1 == best_d and c == best_c and r < best_r):
                     best_score = score
                     best_r, best_c, best_d = r, c, k+1
             for i in range(3):
