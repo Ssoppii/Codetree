@@ -22,7 +22,7 @@ def combine(n, k):
 
 candidate = combine(n, n//2)
 
-MIN = 401
+MIN = 4001
 for c in range(len(candidate)):
     work = combine(len(candidate[0]), 2)
     morning = 0
